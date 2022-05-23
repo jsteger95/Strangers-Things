@@ -1,0 +1,6 @@
+.nav-bar {
+    background: yellow;
+    display: flex;
+    flex-direction: row;
+    
+}

@@ -5,11 +5,19 @@ import Navbar from "./Navigation/Navbar";
 import { fetchPosts } from "./api";
 import { URL } from "./const/Index";
 import Posts from "./components/Posts";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import CreatePost from "./components/CreatePost";
+import "./styling/style.css";
+import LogoutCmp from "./components/LogoutCmp";
+import { Redirect } from "react-router-dom";
 
-const Mario = () => {
+const App = () => {
   const [posts, setPosts] = useState([]);
-
-  const fetchAllPosts = async () => {};
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     fetchPosts(URL).then((posts) => {
@@ -19,21 +27,49 @@ const Mario = () => {
   return (
     <div>
       <Navbar />
-      {posts.map((post) => {
-        console.log(post);
-        return <div>{post.author.username} !! 
-        {post.description} !! 
-        {post.location} !! 
-        {post.price}
-        {post.title}
-        {JSON.stringify(post.messages)}
-        <br></br><hr /></div>
-      })}
-      <Posts />
+      <LogoutCmp
+        setIsLoggedIn={setIsLoggedIn}
+        setUserName={setUserName}
+        setPassword={setPassword}
+      />
+      <Switch>
+        <Route path="/Posts">
+          <Posts post={posts} />
+          <CreatePost />
+        </Route>
+        <Route path="/Login">
+          {/* {loggedIn ? <Redirect to="/dashboard" /> : <PublicHomePage />} */}
+          {isLoggedIn ? (
+            <Redirect to="/posts" />
+          ) : (
+            <Login
+              setIsLoggedIn={setIsLoggedIn}
+              setUserName={setUserName}
+              setPassword={setPassword}
+              userName={userName}
+              password={password}
+            />
+          )}
+        </Route>
+        <Route path="/Register">
+          <Register
+            setIsLoggedIn={setIsLoggedIn}
+            setUserName={setUserName}
+            setPassword={setPassword}
+            userName={userName}
+            password={password}
+          />
+        </Route>
+      </Switch>
     </div>
   );
 };
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-const element = <h1>Strangers Things</h1>;
-root.render(<Mario />);
+const root = ReactDOM.createRoot(document.getElementById("app"));
+root.render(
+  <Router>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </Router>
+);
