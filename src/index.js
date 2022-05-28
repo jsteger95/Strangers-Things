@@ -12,12 +12,14 @@ import CreatePost from "./components/CreatePost";
 import "./styling/style.css";
 import LogoutCmp from "./components/LogoutCmp";
 import { Redirect } from "react-router-dom";
+import { getToken } from "./authorization";
 
 const App = () => {
   const [posts, setPosts] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [token, setToken] = useState(getToken());
 
   useEffect(() => {
     fetchPosts(URL).then((posts) => {
@@ -35,7 +37,7 @@ const App = () => {
       <Switch>
         <Route path="/Posts">
           <Posts post={posts} />
-          <CreatePost />
+          <CreatePost setPosts={setPosts} posts={posts} token={token}/>
         </Route>
         <Route path="/Login">
           {/* {loggedIn ? <Redirect to="/dashboard" /> : <PublicHomePage />} */}

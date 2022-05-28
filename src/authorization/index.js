@@ -1,7 +1,7 @@
 import { TOKEN_KEY, USER_KEY } from "../const/Index";
 
 export function getToken() {
-    const myToken = JSON.parse(localStorage.getItem(TOKEN_KEY));
+    const myToken = localStorage.getItem(TOKEN_KEY);
     return myToken;
 }
 export function storeToken(token) {

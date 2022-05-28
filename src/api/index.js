@@ -57,25 +57,31 @@ export async function loginUser(username, password) {
   //     })
   //     .catch(console.error);
 }
-export async function createNewPost(title, description, price, user, token) {
-  await fetch(`${APIURL}/posts`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${token}`,
+export async function createNewPost(title, description, price, token) {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", `Bearer ${token}`);
+
+  const raw = JSON.stringify({
+    post: {
+      title: title,
+      description: description,
+      price: price,
     },
-    body: JSON.stringify({
-      post: {
-        title: title,
-        description: description,
-        price: price,
-        author: user,
-      },
-    }),
-  })
-    .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-    })
-    .catch(console.error);
+  });
+
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+
+  fetch(
+    "https://strangers-things.herokuapp.com/api/2202-ftb-et-web-pt/posts",
+    requestOptions
+  )
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.log("error", error));
 }
