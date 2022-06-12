@@ -16,11 +16,12 @@ const CreatePost = ({setPosts, posts, token}) => {
           event.preventDefault();
           try {
             const user = getUser();
+            const token = getToken();
             const newPost = await createNewPost(
               title,
               description,
               user,
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjkyOTk5YTNlZTdiODAwMTdlYmEwNjUiLCJ1c2VybmFtZSI6Im1hcmlvbSIsImlhdCI6MTY1Mzc3NDkyM30.LKe_8v7c0NjJHd__KdoN2U1Eg-pJGMs6trWjLBRJGFA"
+              token,
             );
             setPosts([newPost, ...posts])
           } catch (error) {
